@@ -4,6 +4,7 @@
 def reverse_string(target_str):
     u"""
     入力された文字列を逆順で返すメソッドです
+    サロゲートペア未対応
     @param target_str 入力文字列. string でも実行できますが、 unicode での入力を推奨
     @return 入力された文字列を逆順にした文字列
     """
@@ -14,5 +15,7 @@ def reverse_string(target_str):
     return reverse_str
 
 
+"""
 if __name__ == '__main__':
     print reverse_string(u'あいう')
+"""
