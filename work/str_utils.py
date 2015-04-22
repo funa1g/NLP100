@@ -61,11 +61,9 @@ def split_sentence_to_words(sentence):
     word_start = 0
     for i in range(sentence_len):
         if sentence[i] in BREAK_CHARS:
-            if word_start == i:
-                word_start = i + 1
-                continue
-            word = sentence[word_start: i]
-            words.append(word)
+            if word_start != i:
+                word = sentence[word_start: i]
+                words.append(word)
             word_start = i + 1
     if word_start != sentence_len:
         word = sentence[word_start: sentence_len]
