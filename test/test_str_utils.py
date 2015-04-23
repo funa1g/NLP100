@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 from nose.tools import eq_, ok_
-from work.str_utils import reverse_string, get_odd_string, connect_string_alternately, split_sentence_to_words, count_words_length, make_char_ngram, make_word_ngram, make_time_sentence
+from work.str_utils import reverse_string, get_odd_string, connect_string_alternately, split_sentence_to_words, count_words_length, make_char_ngram, make_word_ngram, make_time_sentence, cipher, make_typoglycemia
 
 class StrUtilTestCase(TestCase):
 
@@ -75,3 +75,21 @@ class StrUtilTestCase(TestCase):
         # 正常系
         eq_(make_time_sentence(3, u'天気', u'晴れ'), u'3時の天気は晴れ')
         eq_(make_time_sentence(True, False, True), u'True時のFalseはTrue')
+
+
+    def test_cipher(self):
+        # 正常系
+        eq_(cipher('abc'), u'zyx')
+        eq_(cipher('zyx'), u'abc')
+        eq_(cipher('The XX\'s'), u'Tsv XX\'h')
+
+
+    def test_make_typoglycemia(self):
+        # 正常系
+        eq_(make_typoglycemia('word'), 'word')
+        eq_(make_typoglycemia(u'word'), u'word')
+        test_word = make_typoglycemia('baystars')
+        eq_(test_word[0], 'b')
+        eq_(test_word[7], 's')
+        ok_(test_word[1: 7] != 'aystar')
+        

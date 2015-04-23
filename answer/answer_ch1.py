@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from work.str_utils import reverse_string, get_odd_string, connect_string_alternately, split_sentence_to_words, count_words_length, make_char_ngram, make_word_ngram, make_time_sentence
+from work.str_utils import reverse_string, get_odd_string, connect_string_alternately, split_sentence_to_words, count_words_length, make_char_ngram, make_word_ngram, make_time_sentence, cipher, make_typoglycemia
 
 u"""
 NLP100本ノック 2015 Chapter1 の解答を作成し、実行する
 """
 
 def answer_q00():
-    problem_string = u'stressed'
-    return reverse_string(problem_string)
+    problem_str = u'stressed'
+    return reverse_string(problem_str)
 
 
 def answer_q01():
-    problem_string = u'パタトクカシーー'
-    return get_odd_string(problem_string)
+    problem_str = u'パタトクカシーー'
+    return get_odd_string(problem_str)
     
 
 def answer_q02():
@@ -57,19 +57,39 @@ def answer_q06():
     word2_char_bigram = make_char_ngram(2, problem_word2)
     x = set(word1_char_bigram)
     y = set(word2_char_bigram)
-    answer_string  = '\n'
-    answer_string += u'和集合:' + str(x.union(y)) + '\n'
-    answer_string += u'積集合:' + str(x.intersection(y)) + '\n'
-    answer_string += u'差集合(X):' + str(x.difference(y)) + '\n'
-    answer_string += u'差集合(Y):' + str(y.difference(x)) + '\n'
-    answer_string += problem_word3 + u'を含んでいるかどうか(X):' + str(problem_word3 in x) + '\n'
-    answer_string += problem_word3 + u'を含んでいるかどうか(Y):' + str(problem_word3 in y) + '\n'
-    return answer_string
+    answer_str  = '\n'
+    answer_str += u'和集合:' + str(x.union(y)) + '\n'
+    answer_str += u'積集合:' + str(x.intersection(y)) + '\n'
+    answer_str += u'差集合(X):' + str(x.difference(y)) + '\n'
+    answer_str += u'差集合(Y):' + str(y.difference(x)) + '\n'
+    answer_str += problem_word3 + u'を含んでいるかどうか(X):' + str(problem_word3 in x) + '\n'
+    answer_str += problem_word3 + u'を含んでいるかどうか(Y):' + str(problem_word3 in y) + '\n'
+    return answer_str
 
 
 def answer_q07():
     return make_time_sentence(12, u'気温', 22.4)
-    
+
+
+def answer_q08():
+    original_str = "supercalifragilisticexpialidocious"
+    encrypt_str = cipher(original_str)
+    decrypt_str = cipher(encrypt_str)
+    answer_str  = '\n'
+    answer_str += u'暗号化前:' + original_str + '\n'
+    answer_str += u'暗号化後:' + encrypt_str + '\n'
+    answer_str += u'復号化後:' + decrypt_str + '\n'
+    return answer_str
+
+
+def answer_q09():
+    problem_sentence = "I couldn't believe that I could actually understand what I was reading : the phenomenal power of the human mind ."
+    words = split_sentence_to_words(problem_sentence)
+    typo_words = []
+    for word in words:
+        typo_words.append(make_typoglycemia(word))
+    return u' '.join(typo_words)
+
     
 if __name__ == '__main__':
     answer_string = ''
@@ -81,4 +101,6 @@ if __name__ == '__main__':
     answer_string += 'answer_q05: ' + answer_q05() + '\n\n'
     answer_string += 'answer_q06: ' + answer_q06() + '\n\n'
     answer_string += 'answer_q07: ' + answer_q07() + '\n\n'
+    answer_string += 'answer_q08: ' + answer_q08() + '\n\n'
+    answer_string += 'answer_q09: ' + answer_q09() + '\n\n'
     print answer_string

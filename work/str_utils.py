@@ -1,5 +1,7 @@
-
 # -*- coding: utf-8 -*-
+
+from random import shuffle
+
 
 def reverse_string(target_str):
     u"""
@@ -127,6 +129,38 @@ def make_time_sentence(x, y, z):
     return x + u'時の' + y + u'は' + z
 
 
+def cipher(sentence):
+    u"""
+    入力された文字列の英小文字のみ変換して返す
+    """
+    sentence_len = len(sentence)
+    encrypt_str = ""
+    for i in range(sentence_len):
+        codepoint = ord(sentence[i])
+        if codepoint >= 97 and codepoint <= 122:
+            encrypt_str += unichr(219 - codepoint)
+        else:
+            encrypt_str += unichr(codepoint)
+    return encrypt_str
+
+
+def make_typoglycemia(word):
+    u"""
+    入力された文字列の先頭と末尾を残し、それ以外の順序をランダムに入れ替える
+    文字数が四以下の場合には、そのままの値を返す
+    """
+    word_len = len(word)
+    if word_len <= 4:
+        return word
+    typo_word = word[0]
+    random_range = range(1, word_len - 1)
+    shuffle(random_range)
+    for i in random_range:
+        typo_word += word[i]
+    typo_word += word[word_len - 1]
+    return typo_word
+
+    
 """
 if __name__ == '__main__':
     print split_sentence_to_words('Hello Goodbye')
