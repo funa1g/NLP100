@@ -56,7 +56,7 @@ def split_sentence_to_words(sentence):
     @return 各単語のリスト
     """
     words = []
-    BREAK_CHARS = [u' ', u'.', u',', u'\'', u'\"']
+    BREAK_CHARS = [u' ', u'.', u',', u'\"']
     sentence_len = len(sentence)
     word_start = 0
     for i in range(sentence_len):
@@ -76,6 +76,55 @@ def count_words_length(words):
     入力された文字列のリストを、その文字数のリストにして返す
     """
     return [len(word) for word in words]
+
+
+def make_char_ngram(n, sentence):
+    u"""
+    入力された値のn-gramのリストを作成する
+    @param n n-gramのnを指定します
+    @param sentence 対象文字列
+    @return 作成したn-gramのリスト
+    """
+    return __make_ngram(n, sentence)
+    
+
+def make_word_ngram(n, sentence):
+    u"""
+    入力された値のn-gramのリストを作成する
+    @param n n-gramのnを指定します
+    @param sentence 対象文字列
+    @return 作成したn-gramのリスト
+    """
+    words = split_sentence_to_words(sentence)
+    return __make_ngram(n, words)
+
+
+def __make_ngram(n, target):
+    u"""
+    入力された値のn-gramのリストを作成する
+    @param n n-gramのnを指定します
+    @param target 処理対象。文とリストに対応
+    @return 作成したn-gramのリスト
+    """
+    ngram_list = []
+    target_len = len(target)
+    for i in range(target_len - n + 1):
+        ngram_value = target[i: i + n]
+        ngram_list.append(ngram_value)
+    return ngram_list
+
+
+def make_time_sentence(x, y, z):
+    u"""
+    x時のyはzという文字列を出力する
+    """
+    if not isinstance(x, (unicode, str)):
+        x = str(x)
+    if not isinstance(y, (unicode, str)):
+        y = str(y)
+    if not isinstance(z, (unicode, str)):
+        z = str(z)
+    return x + u'時の' + y + u'は' + z
 
 
 """
