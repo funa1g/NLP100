@@ -92,15 +92,15 @@ def answer_q09():
 
     
 if __name__ == '__main__':
-    answer_string = ''
-    answer_string += 'answer_q00: ' + answer_q00() + '\n\n'
-    answer_string += 'answer_q01: ' + answer_q01() + '\n\n'
-    answer_string += 'answer_q02: ' + answer_q02() + '\n\n'
-    answer_string += 'answer_q03: ' + str(answer_q03()) + '\n\n'
-    answer_string += 'answer_q04: ' + str(answer_q04()) + '\n\n'
-    answer_string += 'answer_q05: ' + answer_q05() + '\n\n'
-    answer_string += 'answer_q06: ' + answer_q06() + '\n\n'
-    answer_string += 'answer_q07: ' + answer_q07() + '\n\n'
-    answer_string += 'answer_q08: ' + answer_q08() + '\n\n'
-    answer_string += 'answer_q09: ' + answer_q09() + '\n\n'
-    print answer_string
+    answer_str = ''
+    answer_str += 'answer_q00: ' + answer_q00() + '\n\n'
+    answer_str += 'answer_q01: ' + answer_q01() + '\n\n'
+    answer_str += 'answer_q02: ' + answer_q02() + '\n\n'
+    answer_str += 'answer_q03: ' + str(answer_q03()) + '\n\n'
+    answer_str += 'answer_q04: ' + str(answer_q04()) + '\n\n'
+    answer_str += 'answer_q05: ' + answer_q05() + '\n\n'
+    answer_str += 'answer_q06: ' + answer_q06() + '\n\n'
+    answer_str += 'answer_q07: ' + answer_q07() + '\n\n'
+    answer_str += 'answer_q08: ' + answer_q08() + '\n\n'
+    answer_str += 'answer_q09: ' + answer_q09() + '\n\n'
+    print answer_str
