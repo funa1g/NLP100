@@ -11,14 +11,31 @@ class MeCabReader:
 
     def _read(self, path):
         f = open(path, 'r')
+        sstart_pos = 0
+        send_pos = 0
+        pstart_pos = 0
+        pend_pos = 0
+        prePeriod = False
         for i, line in enumerate(f):
             # 各形態素をリストとして保存
             morph = Morphology(line)
             self.__morphs.append(morph)
             # 文の位置を計算
-            # EOSあるいは文末ではなく、直前がそのいずれかの場合に文頭
-            # 文末記号の場合には文末(ただし、次に文末記号が続く場合は文末の位置をシフト
-            # EOSの際には段落末
+            if morph.isEOS():
+                if not prePeriod:
+                    send_pos = i - 1
+                    prePeriod = True
+            elif morph.isPeriod():
+                send_pos = i
+                prePeriod = True
+            elif morph.isSpace():
+                pass
+            elif prePeriod:
+                self.__sentence_pos.append((sstart_pos, send_pos))
+                sstart_pos = i
+                prePeriod = False
+        if sstart_pos != 0 and send_pos != 0:
+            self.__sentence_pos.append((sstart_pos, send_pos))                
 
     def get_paragraph_count(self):
         return len(self.__paragraph_pos)
@@ -26,10 +43,18 @@ class MeCabReader:
     def get_sentence_count(self):
         return len(self.__sentence_pos)
 
-#    def makeParagraphSurface(self, i):
-#        return self.paragraphs[i].makeSurface()
+    def sentence_pos(self, index):
+        u"""
+        文の品詞の出現順に並んだリストを返す
+        @param index 取得する文
+        """
+        pos_list = []
+        start_pos, end_pos = self.__sentence_pos[index]
+        for i in range(start_pos, end_pos + 1):
+            pos_list.append(self.__morphs[i].pos)
+        return pos_list
 
-    def make_surfaces_set(self, pos, pos1=None):
+    def surfaces_set(self, pos, pos1=None):
         u"""
         読み込んだ文書全体の表層形のSetを返す
         @param pos 品詞
@@ -41,7 +66,7 @@ class MeCabReader:
                 surfaces.add(morph.surface)
         return surfaces
 
-    def make_bases_set(self, pos, pos1=None):
+    def bases_set(self, pos, pos1=None):
         u"""
         読み込んだ文書全体の原形のSetを返す
         @param pos 品詞
@@ -62,7 +87,7 @@ class MeCabReader:
             return True
         return False
 
-    def make_no_connect_words(self):
+    def no_connect_words(self):
         connect_words = Set()
         temp_morphs = []
         for morph in self.__morphs:
@@ -76,7 +101,7 @@ class MeCabReader:
                 temp_morphs.pop(0)
         return connect_words
 
-    def make_connect_words(self):
+    def connect_words(self):
         connect_words = Set()
         temp_words = []
         for morph in self.__morphs:
@@ -93,7 +118,7 @@ class MeCabReader:
             connect_words.add("".join(temp_words))
         del temp_words[0 : len(temp_words)]
 
-    def make_hist_list(self, threshold=0):
+    def hist_list(self, threshold=0):
         u"""
         各単語の原形と出現回数の組のリストを返す
         @param threshold 上位何件を取得するかを指定する
@@ -141,10 +166,15 @@ class Morphology:
     def isPeriod(self):
         u"""
         この形態素が文末を示す語句であるかを返す
-        現在は、「。」」を対象としている。
+        現在は、「。」！？」を対象としている。
         """
-        return self.surface in ["。", "」"]
+        return self.surface in ["。", "」", "！", "？"]
 
+    def isSpace(self):
+        u"""
+        この形態素が空白を示すかを返す
+        """
+        return self.pos1 == "空白"
 
 
 def reader(path):
@@ -154,20 +184,30 @@ def reader(path):
 
 if __name__ == '__main__':
     mb = reader("../../resource/neko.txt.mecab")
+    sentence_count = mb.get_sentence_count()
+    pos_set = Set()
+    for i in range(sentence_count):
+        pos_set.add(",".join(mb.sentence_pos(i)))
+    print len(pos_set), sentence_count
+    # for pos in pos_set:
+        # print pos
+
+    """
     print mb.get_paragraph_count()
     print mb.get_sentence_count()
-    surfaces = mb.make_surfaces_set("名詞")
+    surfaces = mb.surfaces_set("名詞")
     print len(surfaces)
-    surfaces = mb.make_surfaces_set("名詞", "サ変接続")
+    surfaces = mb.surfaces_set("名詞", "サ変接続")
     print len(surfaces)
-    bases = mb.make_bases_set("名詞", "サ変接続")
+    bases = mb.bases_set("名詞", "サ変接続")
     print len(bases)
-    hist_list = mb.make_hist_list()
+    hist_list = mb.hist_list()
     f = open("neko.txt.hist", "w")
     for word in hist_list:
         f.write(word[0] + "\t" + str(word[1]) + "\n")
-    connect_words = mb.make_no_connect_words()
+    connect_words = mb.no_connect_words()
     #for word in connect_words:
     #    print word
     #for base in bases:
     #    print base
+    """
